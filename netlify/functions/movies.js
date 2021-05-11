@@ -57,7 +57,7 @@ exports.handler = async function(event) {
 if(movieresults.genres.includes(genre) && movieresults.startYear == year && movieresults.runtimeMinutes !== `\\N` && movieresults.genres !== `\\N`){
         // Add to array    
       returnValue.movies.push(Post)
-        // Increase counter by 1    
+        // Increase counter by 1...can also do other way as shown in class example completed
       returnValue.numResults=returnValue.numResults+1  
     }
   }
