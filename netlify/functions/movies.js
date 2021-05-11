@@ -19,29 +19,52 @@ exports.handler = async function(event) {
   console.log(moviesFromCsv)
 
   // 🔥 hw6: your recipe and code starts here!
+  // Get year + genre from querystring parameters
   let year = event.queryStringParameters.year
   let genre = event.queryStringParameters.genre
-  
+  // If above result is blank, return nope
   if (year == undefined || genre == undefined) {
     return {
       statusCode: 200, // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
       body: `Nope!` // a string of data
     }
   }
+  // Otherwise, when conditions satisfied, do this...
+
+
+  // ReturnValue = count + movie array
   else {
     let returnValue = {
       numResults: 0,
       movies: []
     }
 
+     // Loop through movies data
     for (let i=0; i < moviesFromCsv.length; i++) {
-
+    // Select each
+    let movieresults = moviesFromCsv[i]
+    
+    
+    // Create new post to house info    
+        let Post = {
+          Title: movieresults.primaryTitle,
+          Release_Date: movieresults.startYear,
+          Genres: movieresults.genres
     }
 
+
+// Check if meets criteria and disregard any //N runtime or genres
+if(movieresults.genres.includes(genre) && movieresults.startYear == year && movieresults.runtimeMinutes !== `\\N` && movieresults.genres !== `\\N`){
+        // Add to array    
+      returnValue.movies.push(Post)
+        // Increase counter by 1    
+      returnValue.numResults=returnValue.numResults+1  
+    }
+  }
     // a lambda function returns a status code and a string of data
     return {
       statusCode: 200, // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-      body: `Hello from the back-end!` // a string of data
+    body: JSON.stringify(returnValue) // a string of data
     }
   }
 }
